@@ -64,6 +64,18 @@ $(document).ready(function() {
     fromObjects.push({ID:"9",iManufacturer:"Evans & Sutherland",iMPartNumber:"230-120-112AC",iSerialNumber:"",iSimCategory:"Visual",iPartType:"PCB",iDescription:"",iGroup:"1",iLocation:"Offsite",iSold:""});
     fromObjects.push({ID:"10",iManufacturer:"Evans & Sutherland",iMPartNumber:"230-121-150AC",iSerialNumber:"",iSimCategory:"Visual",iPartType:"PCB",iDescription:"",iGroup:"1",iLocation:"Offsite",iSold:""});
 
+    resulttoObjectsFiltered = [];
+    resulttoObjectsFiltered.push({ID:"1",iMPartNumber:"230-132-111AA",iSimCategory:"Visual"});
+    resulttoObjectsFiltered.push({ID:"2",iMPartNumber:"230-132-111AA",iSimCategory:"Visual"});
+    resulttoObjectsFiltered.push({ID:"3",iMPartNumber:"230-120-112AC",iSimCategory:"Visual"});
+    resulttoObjectsFiltered.push({ID:"4",iMPartNumber:"230-120-112AC",iSimCategory:"Visual"});
+    resulttoObjectsFiltered.push({ID:"5",iMPartNumber:"230-120-112AC",iSimCategory:"Visual"});
+    resulttoObjectsFiltered.push({ID:"6",iMPartNumber:"230-120-112AC",iSimCategory:"Visual"});
+    resulttoObjectsFiltered.push({ID:"7",iMPartNumber:"230-120-112AC",iSimCategory:"Visual"});
+    resulttoObjectsFiltered.push({ID:"8",iMPartNumber:"230-120-112AC",iSimCategory:"Visual"});
+    resulttoObjectsFiltered.push({ID:"9",iMPartNumber:"230-120-112AC",iSimCategory:"Visual"});
+    resulttoObjectsFiltered.push({ID:"10",iMPartNumber:"230-121-150AC",iSimCategory:"Visual"});
+
     testRFCCompliance1 = '';
     testRFCCompliance1 += 'aaa,bbb,ccc\r\n';
     testRFCCompliance1 += 'zzz,yyy,xxx\r\n';
@@ -227,6 +239,14 @@ $(document).ready(function() {
     //var output = $.fromObjects(fromObjects);
     //start();
     //deepEqual(output, fromObjects, "$.csv.fromObjects()");
+  });
+
+  test("Parsing - to Objects with filtered headers (ID,iMPartNumber,iSimCategory)", function() {
+    expect(1);
+    stop();
+    var output = $.csv.toObjects(toObjects,null,null,["ID","iMPartNumber","iSimCategory"]);
+    start();
+    deepEqual(output, resulttoObjectsFiltered, '$.csv.toObjects(toObjects,null,null,["ID","iMPartNumber","iSimCategory"]);');
   });
 
   test("RFC 4180 Compliance", function() {

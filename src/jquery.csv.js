@@ -679,18 +679,20 @@ RegExp.escape= function(s) {
      * @param {Character} [separator] An override for the separator character. Defaults to a comma(,).
      * @param {Character} [delimiter] An override for the delimiter character. Defaults to a double-quote(").
      * @param {Boolean} [headers] Indicates whether the data contains a header line. Defaults to true.
+     * @param {Array} [headersWhiteList] Array of headers to keep. Defaults to null (all headers).
      *
      * This method deals with multi-line CSV strings. Where the headers line is
      * used as the key for each value per entry.
      */
-    toObjects: function(csv, options, callback) {
-      var options = (options !== undefined ? options : {});
+    toObjects: function(csv, options, callback,headersWhiteList) {
+      var options = (( (options !== undefined) && (options != null)) ? options : {});
       var config = {};
       config.callback = ((callback !== undefined && typeof(callback) === 'function') ? callback : false);
       config.separator = 'separator' in options ? options.separator : $.csv.defaults.separator;
       config.delimiter = 'delimiter' in options ? options.delimiter : $.csv.defaults.delimiter;
       config.headers = 'headers' in options ? options.headers : $.csv.defaults.headers;
       options.start = 'start' in options ? options.start : 1;
+      headersWhiteList = ((headersWhiteList !== undefined && typeof(headersWhiteList) === 'object') ? headersWhiteList : false);
       
       // account for headers
       if(config.headers) {
@@ -743,6 +745,16 @@ RegExp.escape= function(s) {
         options.state.rowNum = 1;
       }
       
+	  // Filter headers whitlist
+	  if (headersWhiteList) {
+		  var previousHeadersList = headers;
+		  headers = {};
+		  for(var j in previousHeadersList) {
+			  // If you don't want jQuery, see indexOf on http://stackoverflow.com/questions/143847/best-way-to-find-an-item-in-a-javascript-array
+			  if ($.inArray(previousHeadersList[j],headersWhiteList) != -1)  headers[j] = previousHeadersList[j];
+		  }
+	  }
+	  
       // convert data to objects
       for(var i=0, len=lines.length; i<len; i++) {
         var entry = $.csv.toArray(lines[i], options);
